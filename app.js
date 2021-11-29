@@ -17,7 +17,7 @@ var conducteursRouter = require('./routes/conducteurs');
 var ownersRouter = require('./routes/owners');
 var parkingsRouter = require('./routes/parkings');
 var comptesRouter= require('./routes/comptes');
-var reservationsRouter= require('./routes/comptes');
+var reservationsRouter= require('./routes/reservation');
 var app = express();
 
 // view engine setup
@@ -26,11 +26,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/conducteur', conducteursRouter);
-app.use('/owner', ownersRouter);
-app.use('/parking', parkingsRouter);
-app.use('/compte', comptesRouter);
-app.use('/reservation', reservationsRouter);
+app.use('/conducteurs', conducteursRouter);
+app.use('/owners', ownersRouter);
+app.use('/parkings', parkingsRouter);
+app.use('/comptes', comptesRouter);
+app.use('/reservations', reservationsRouter);
 
 
 // catch 404 and forward to error handler

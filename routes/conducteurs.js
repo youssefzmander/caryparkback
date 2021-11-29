@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
-const Conducteur= require('../models/conducteur')
+const Conducteur= require('../models/conducteur');
+const jwt = require("jsonwebtoken");
+
+
 
 //getting all
 router.get('/', async (req,res) =>{
@@ -27,6 +30,8 @@ voiture : req.body.voiture,
 numero : req.body.numero,
 email : req.body.email,
 role:req.body.role,
+pw:req.body.pw,
+cpw:req.body.cpw,
 })
 try{
   const newConducteur= await conducteur.save()
@@ -59,6 +64,15 @@ router.patch('/:id',getConducteur, async(req,res) => {
   if(req.body.role != null){
     res.conducteur.role=req.body.role
   }
+  if(req.body.pw != null){
+    res.conducteur.pw=req.body.pw
+  }
+  if(req.body.cpw != null){
+    res.conducteur.cpw=req.body.cpw
+  }
+
+  
+  
 
     try{
 const updateConducteur= await res.conducteur.save()

@@ -20,9 +20,9 @@ router.post('/', async(req,res) => {
     const owner = new Owner({
     nom :req.body.nom,
     prenom : req.body.prenom,
-    cin : req.body. cin,
+    cin : req.body.cin,
     adresse : req.body.adresse,
-    role : req.body.role
+    role : req.body.role,
     })
     try{
       const newOwner= await owner.save()

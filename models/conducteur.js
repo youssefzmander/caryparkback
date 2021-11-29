@@ -28,7 +28,15 @@ const conducteurSchema =new mongoose.Schema({
     role:{
         type:String,
         default:true,
-    }
+    },
+    pw:{
+        type: String,
+        default:true ,
+    },
+    cpw:{
+        type: String,
+        default:true ,
+    },
 
 })
 module.exports = mongoose.model('conducteur',conducteurSchema)

@@ -7,11 +7,11 @@ const ownerSchema =new mongoose.Schema({
     },
    prenom:{ 
         type : String,
-        default: true,
+        require:true,
     },
     cin : {
         type : Number ,
-        default: true,
+        require:true,
      },
     adresse: {
         type : String,
@@ -20,7 +20,7 @@ const ownerSchema =new mongoose.Schema({
     role: {
         type : String,
         require:true,
-    }
+    },
    
 
 })

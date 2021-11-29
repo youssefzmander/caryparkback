@@ -5,7 +5,7 @@ const Parking= require('../models/parking')
 //getting all
 router.get('/', async (req, res)=>{
   try{
-    const parkings = await parking.find()
+    const parkings = await Parking.find()
     res.json(parkings)
   }catch(err){
     res.status(500).json({message: err.message})
@@ -19,10 +19,11 @@ router.get('/', getParking, (req, res) => {
 //creating one 
 router.post('/', async(req,res) => {
   const parking = new Parking({
-  localisation :req.body.localisation,
-  nbrplace : req.body.nbrplace,
+  localisation : req.body.localisation,
+  nbrPlace : req.body.nbrPlace,
   prix : req.body.prix,
-  disponibilite : req.body.disponibilite
+  disponibilite : req.body.disponibilite,
+  id_parking : req.body.id_parking,
   })
   try{
     const newParking= await parking.save()
@@ -38,8 +39,8 @@ router.patch('/:id',getParking, async(req,res) => {
   if(req.body.localisation != null){
     res.conducteur.localisation=req.body.localisation
   }
-  if(req.body.nbr_place != null){
-    res.conducteur.nbr_place=req.body.nbr_place 
+  if(req.body.nbrPlace!= null){
+    res.conducteur.nbrPlace=req.body.nbrPlace 
   }
   if(req.body.prix != null){
     res.conducteur.prix=req.body.prix
@@ -50,6 +51,7 @@ router.patch('/:id',getParking, async(req,res) => {
   if(req.body.id_parking != null){
     res.conducteur.id_parking=req.body.id_parking
   }
+  
 
 
     try{

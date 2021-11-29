@@ -5,7 +5,7 @@ const reservationSchema =new mongoose.Schema({
         required: true,
     },
     date_sorti:{ 
-        type : date,
+        type : Date,
         required: true,
     },
     id_place : {
@@ -19,4 +19,4 @@ const reservationSchema =new mongoose.Schema({
    
 
 })
-module.exports = mongoose.model('parking', parkingSchema)
+module.exports = mongoose.model('reservation', reservationSchema)
