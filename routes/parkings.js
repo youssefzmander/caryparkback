@@ -77,7 +77,7 @@ res.json({message: 'DELETED parking'})
 async function getParking(res,res,next){
   let parking
   try{
-parking= await Parking.findById(req,res,next)
+parking= await Parking.findById(req.params.id)
 if ( parking == null){
   return res.status(404).json({message: ' desole parking  non trouvable '})
 }

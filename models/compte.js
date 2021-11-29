@@ -1,13 +1,32 @@
 const mongoose = require('mongoose')
 
-const compteSchema =new mongoose.Schema({
-    login:{
-        type : String,
+const compte = new mongoose.Schema({
+    nom: {
+        type: String,
+    },
+    prenom: {
+        type: String,
+    },
+    cin: {
+        type: Number,
         required: true,
     },
-   password:{ 
-        type : String,
-        required: true,
+    voiture: {
+        type: String
     },
+    numero: {
+        type: Number
+    },
+    email: {
+        type: String
+    },
+    password: {
+        type: String
+    },
+    adresse: {
+        type : String    },
+    role: {
+        type : String    },
+
 })
-module.exports = mongoose.model('compte',compteSchema)
+module.exports = mongoose.model('compte', compte)

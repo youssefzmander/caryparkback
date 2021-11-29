@@ -1,25 +1,18 @@
+const { URITooLong } = require('http-errors')
 const mongoose = require('mongoose')
 const parkingSchema =new mongoose.Schema({
-    localisation :{
-        type : String,
-        required: true,
+    adresse :{
+        type :String
     },
+    longAtitude:Number,
+    latatitude:Number,
+
     nbrPlace:{ 
-        type : Number,
-        required: true,
+        type : Number
     },
     prix : {
-        type : Number ,
-        required: true,
+        type : Number 
      },
-    disponibilite: {
-        type : Boolean,
-        required: true,
-    },
-    id_parking: {
-        type : Number,
-        required: true,
-    },
    
 
 })

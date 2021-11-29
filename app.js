@@ -13,11 +13,11 @@ db.on('error',(error) => console.error(error))
 db.once ('open', () =>console.log('connected to DataBase'))
 
 
-var conducteursRouter = require('./routes/conducteurs');
-var ownersRouter = require('./routes/owners');
 var parkingsRouter = require('./routes/parkings');
-var comptesRouter= require('./routes/comptes');
+var compte= require('./routes/comptes');
 var reservationsRouter= require('./routes/reservation');
+var authentification = require('./routes/auth');
+
 var app = express();
 
 // view engine setup
@@ -26,11 +26,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/conducteurs', conducteursRouter);
-app.use('/owners', ownersRouter);
+app.use('/auth', authentification);
+app.use('/comptes', compte);
+
+//tna7ih wa9t tcodi 
+
+app.use(verifyToken)
+
+
 app.use('/parkings', parkingsRouter);
-app.use('/comptes', comptesRouter);
 app.use('/reservations', reservationsRouter);
+
 
 
 // catch 404 and forward to error handler
@@ -50,5 +56,23 @@ message : err.message,
 res.status(err.status || 500);
 
 });
+const jwt = require("jsonwebtoken");
+
+function verifyToken(req, res, next) {
+    const authHeader = req.headers["authorization"];
+
+    const token = authHeader && authHeader.split(" ")[1];
+    console.log("tokenn:", token);
+    if (token == null) return res.sendStatus(401); // if there isn't any token
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+        if (err) {
+            return res.sendStatus(403)
+        }
+        req.body["payload"] = user;
+        console.log(req.body);
+
+        next(); // pass the execution off to whatever request the client intended
+    });
+}
 
 module.exports = app;

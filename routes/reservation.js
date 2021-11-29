@@ -73,7 +73,7 @@ res.json({message: 'DELETED reservation'})
 async function getReservation(req,res,next){
   let conducteur
   try{
-reservation= await Reservation.findById(req,res,next)
+reservation= await Reservation.findById(req.params.id)
 if ( reservation == null){
   return res.status(404).json({message: ' desole reservation non trouvable '})
 }

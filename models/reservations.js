@@ -1,12 +1,11 @@
 const mongoose = require('mongoose')
 const reservationSchema =new mongoose.Schema({
     date_entre :{
-        type : Date,
-        required: true,
+        type : String,
+       
     },
     date_sorti:{ 
-        type : Date,
-        required: true,
+        type : String,
     },
     id_place : {
         type : Number ,
