@@ -305,8 +305,7 @@ exports.editProfile = async (req, res) => {
                 //email: email,
                 address: address,
                 //password : password,
-                phone: phone,
-                role: role
+                phone: phone
             }
         }
     );
