@@ -1,19 +1,11 @@
-const { URITooLong } = require('http-errors')
-const mongoose = require('mongoose')
-const parkingSchema =new mongoose.Schema({
-    adresse :{
-        type :String
-    },
-    longAtitude:Number,
-    latatitude:Number,
+const mongoose = require("mongoose");
 
-    nbrPlace:{ 
-        type : Number
-    },
-    prix : {
-        type : Number 
-     },
-   
+const ParkingSchema = new mongoose.Schema({
+    adresse: { type: String },
+    nbrPlace: { type: Number },
+    longAtitude: { type: Number },
+    latatitude: { type: Number },
+    prix: { type: Number }
+});
 
-})
-module.exports = mongoose.model('parking', parkingSchema)
+module.exports = mongoose.model("Parking", ParkingSchema);

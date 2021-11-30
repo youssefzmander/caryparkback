@@ -1,19 +1,10 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const place = new mongoose.Schema({
-    id_parking: {
-        type: String,
-    },
-    UserId: {
-        type: String,
-    },
-    Bloc:{
-        type: String,
-    },
-    disponibilite: {
-        type : Boolean,
-        required: true,
-    },
-})
-module.exports = mongoose.model('place', place)
+const PlaceSchema = new mongoose.Schema({
+    idParking: { type: String },
+    userId: { type: String },
+    bloc: { type: String },
+    disponibilite: { type: String }
+});
 
+module.exports = mongoose.model("Place", PlaceSchema);
