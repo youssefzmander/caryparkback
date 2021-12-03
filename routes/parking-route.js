@@ -3,10 +3,12 @@ const router = express.Router();
 const ParkingController = require("../controllers/parking-controller");
 
 router.route("/")
-    .get(ParkingController.getParking)
+    .get(ParkingController.getParkings)
     .post(ParkingController.addParking)
     .put(ParkingController.editParking)
     .delete(ParkingController.deleteParking);
+
+router.post("/with-id", ParkingController.getParkingById)
 
 router.delete("/deleteAllParkings", ParkingController.deleteAllParkings)
 

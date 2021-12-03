@@ -9,34 +9,35 @@ exports.getPlace = async (req, res) => {
         place = await Place.find()
     }
 
-    res.status(201).send({ place , message : "Success" })
+    res.status(201).send({ place, message: "Success" })
 }
 
 exports.addPlace = async (req, res) => {
-    const { idParking , userId, bloc, disponibilite } = req.body;
+    const { bloc, disponibilite, idParking, idUser } = req.body;
 
     const newPlace = new Place();
-    
-    newPlace.idParking = id_parking
-    newPlace.userId = userId
+
     newPlace.bloc = bloc
     newPlace.disponibilite = disponibilite
+    newPlace.idParking = idParking
+    newPlace.idUser = idUser
+
     newPlace.save();
 
     res.status(201).send({ place: "success", place: newPlace });
 }
 
 exports.editPlace = async (req, res) => {
-    const { _id, idParking , userId, bloc, disponibilite } = req.body;
+    const { _id, idParking, userId, bloc, disponibilite } = req.body;
 
     let place = await Place.findOneAndUpdate(
         { _id: _id },
         {
             $set: {
-                idParking : idParking,
-                userId : userId,
-                bloc : bloc,
-                disponibilite : disponibilite
+                idParking: idParking,
+                userId: userId,
+                bloc: bloc,
+                disponibilite: disponibilite
             }
         }
     );

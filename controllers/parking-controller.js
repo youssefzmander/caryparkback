@@ -1,26 +1,22 @@
 let Parking = require("../models/Parking")
 
-exports.getParking = async (req, res) => {
+exports.getParkings = async (req, res) => {
+    res.status(201).send({ parking: await Parking.find(), message: "Success" })
+}
 
-    var parking;
-    if (req.body._id) {
-        parking = await Parking.findById(req.body._id)
-    } else {
-        parking = await Parking.find()
-    }
-
-    res.status(201).send({ parking, message: "Success" })
+exports.getParkingById = async (req, res) => {
+    res.status(201).send({ parking: await Parking.findById(req.body._id), message: "Success" })
 }
 
 exports.addParking = async (req, res) => {
-    const { adresse, nbrPlace, longAtitude, latatitude, prix } = req.body;
+    const { adresse, nbrPlace, longitude, latitude, prix } = req.body;
 
     const newParking = new Parking();
 
     newParking.adresse = adresse;
     newParking.nbrPlace = nbrPlace;
-    newParking.longAtitude = longAtitude;
-    newParking.latatitude = latatitude;
+    newParking.longitude = longitude;
+    newParking.latitude = latitude;
     newParking.prix = prix;
     newParking.save();
 
@@ -28,7 +24,7 @@ exports.addParking = async (req, res) => {
 }
 
 exports.editParking = async (req, res) => {
-    const { _id, adresse, nbrPlace, longAtitude, latatitude, prix } = req.body;
+    const { _id, adresse, nbrPlace, longitude, latitude, prix } = req.body;
 
     let parking = await Parking.findOneAndUpdate(
         { _id: _id },
@@ -36,8 +32,8 @@ exports.editParking = async (req, res) => {
             $set: {
                 adresse: adresse,
                 nbrPlace: nbrPlace,
-                longAtitude: longAtitude,
-                latatitude: latatitude,
+                longitude: longitude,
+                latitude: latitude,
                 prix: prix
             }
         }
