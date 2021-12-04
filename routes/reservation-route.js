@@ -3,7 +3,7 @@ const router = express.Router();
 const ReservationController = require("../controllers/reservation-controller");
 
 router.route("/")
-    .get(ReservationController.getReservation)
+    .get(ReservationController.getAllReservations)
     .post(ReservationController.addReservation)
     .put(ReservationController.editReservation)
     .delete(ReservationController.deleteReservation);

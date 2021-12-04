@@ -1,4 +1,16 @@
-let Reservation = require("../models/Reservation")
+const Parking = require("../models/Parking");
+const Reservation = require("../models/Reservation")
+
+exports.getAllReservations = async (req, res) => {
+    const reservations = await Reservation.find().populate({ path: "parking" }).select("-reservations.reservation");
+
+    if (reservations) {
+        res.status(200).send({ reservations, message: "success" });
+    } else {
+        res.status(403).send({ message: "fail" });
+    }
+};
+
 
 exports.getReservation = async (req, res) => {
 
@@ -9,34 +21,43 @@ exports.getReservation = async (req, res) => {
         reservation = await Reservation.find()
     }
 
-    res.status(201).send({ reservation , message : "Success" })
+    res.status(201).send({ reservation, message: "Success" })
 }
 
 exports.addReservation = async (req, res) => {
-    const { dateEntre , dateSortie, idPlace, idParking } = req.body;
+    const { dateEntre, dateSortie, parking } = req.body;
+    console.log(req.body)
 
     const newReservation = new Reservation();
 
     newReservation.dateEntre = dateEntre;
     newReservation.dateSortie = dateSortie;
-    newReservation.idPlace = idPlace;
-    newReservation.idParking = idParking;
-    newReservation.save();
+    newReservation.parking = parking;
 
-    res.status(201).send({ reservation: "success", reservation: newReservation });
+    await Parking.findOneAndUpdate(
+        { _id: parking },
+        {
+            $push: {
+                reservations: [newReservation._id]
+            }
+        }
+    );
+
+    newReservation.save()
+
+    res.status(201).send({ message: "success", reservation: newReservation });
 }
 
 exports.editReservation = async (req, res) => {
-    const { _id, dateEntre , dateSortie, idPlace, idParking } = req.body;
+    const { _id, dateEntre, dateSortie, parking } = req.body;
 
     let reservation = await Reservation.findOneAndUpdate(
         { _id: _id },
         {
             $set: {
-                title : dateEntre,
-                title : dateSortie,
-                title : idPlace,
-                description : idParking
+                title: dateEntre,
+                title: dateSortie,
+                //description: parking
             }
         }
     );

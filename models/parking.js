@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Reservation = require("./Reservation");
 
 const ParkingSchema = new mongoose.Schema(
     {
@@ -6,7 +7,12 @@ const ParkingSchema = new mongoose.Schema(
         nbrPlace: { type: Number },
         longitude: { type: Number },
         latitude: { type: Number },
-        prix: { type: Number }
+        prix: { type: Number },
+
+        reservations: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Reservation'
+        }]
     },
     {
         timestamps: { currentTime: () => Date.now() },

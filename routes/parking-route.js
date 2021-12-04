@@ -9,7 +9,7 @@ router.route("/")
     .delete(ParkingController.deleteParking);
 
 router.post("/with-id", ParkingController.getParkingById)
-
+router.post("/by-id-user", ParkingController.getParkingByUserId)
 router.delete("/deleteAllParkings", ParkingController.deleteAllParkings)
 
 module.exports = router;

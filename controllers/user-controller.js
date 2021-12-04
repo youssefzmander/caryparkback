@@ -73,7 +73,7 @@ exports.login = async (req, res) => {
 
 exports.loginWithSocialApp = async (req, res) => {
 
-    const { email, fullName } = req.body;
+    const { email, fullName , role } = req.body;
 
     if (email == "") {
         res.status(403).send({ message: "error please provide an email" });
@@ -91,7 +91,7 @@ exports.loginWithSocialApp = async (req, res) => {
             //user.address = ;
             //user.password = ;
             //user.phone = ;
-            user.role = Role.Student;
+            user.role = role;
             user.isVerified = true;
 
             user.save();
@@ -295,7 +295,7 @@ exports.editPassword = async (req, res) => {
 };
 
 exports.editProfile = async (req, res) => {
-    const { email, fullName, address, phone, role } = req.body;
+    const { email, fullName, address, phone, role, isVerified } = req.body;
 
     let user = await User.findOneAndUpdate(
         { email: email },
@@ -305,7 +305,9 @@ exports.editProfile = async (req, res) => {
                 //email: email,
                 address: address,
                 //password : password,
-                phone: phone
+                phone: phone,
+                role: role,
+                isVerified: isVerified
             }
         }
     );

@@ -5,9 +5,10 @@ const ReservationSchema = new mongoose.Schema(
         dateEntre: { type: Date },
         dateSortie: { type: Date },
 
-        idPlace: { type: String },
-        idParking: { type: String }
-
+        parking: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Parking"
+        }
     },
     {
         timestamps: { currentTime: () => Date.now() },

@@ -1,14 +1,18 @@
 const express = require("express");
 const app = express();
 
+const Logger = require('./middlewares/logger-service')
 const mongoose = require("mongoose");
 const port = process.env.PORT || 3000;
 const config = require("./config.json");
 const bodyParser = require("body-parser");
 const path = require("path");
+const cors = require("cors")
 
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(cors());
 
 //we want to be informed whether mongoose has connected to the db or not 
 mongoose.Promise = global.Promise;
@@ -24,12 +28,10 @@ mongoose.connect(config.database, { useNewUrlParser: true, useUnifiedTopology: t
 
 const userRoute = require("./routes/user-route");
 const parkingRoute = require("./routes/parking-route");
-const placeRoute = require("./routes/place-route");
 const reservationRoute = require("./routes/reservation-route");
 
 app.use("/api/user", userRoute);
 app.use("/api/parking", parkingRoute);
-app.use("/api/place", placeRoute);
 app.use("/api/reservation", reservationRoute);
 
 if (process.env.NODE_ENV === "production") {

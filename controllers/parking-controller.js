@@ -1,15 +1,22 @@
 let Parking = require("../models/Parking")
 
 exports.getParkings = async (req, res) => {
-    res.status(201).send({ parking: await Parking.find(), message: "Success" })
+    const parkings = await Parking.find().populate("reservations")
+
+
+    res.status(201).send({ parkings , message: "Success" })
 }
 
 exports.getParkingById = async (req, res) => {
     res.status(201).send({ parking: await Parking.findById(req.body._id), message: "Success" })
 }
 
+exports.getParkingByUserId = async (req, res) => {
+    res.status(201).send({ parking: await Parking.findOne({ idUser : req.body.idUser }), message: "Success" })
+}
+
 exports.addParking = async (req, res) => {
-    const { adresse, nbrPlace, longitude, latitude, prix } = req.body;
+    const { adresse, nbrPlace, longitude, latitude, prix, idUser } = req.body;
 
     const newParking = new Parking();
 
@@ -18,6 +25,7 @@ exports.addParking = async (req, res) => {
     newParking.longitude = longitude;
     newParking.latitude = latitude;
     newParking.prix = prix;
+    newParking.idUser = idUser;
     newParking.save();
 
     res.status(201).send({ parking: "success", parking: newParking });
