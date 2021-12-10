@@ -1,22 +1,29 @@
 let Parking = require("../models/Parking")
+const User = require("../models/User")
 
 exports.getParkings = async (req, res) => {
-    const parkings = await Parking.find().populate("reservations")
+    const parkings = await Parking.find().populate("user reservations")
 
 
     res.status(201).send({ parkings , message: "Success" })
 }
 
+exports.getMyParkings = async (req, res) => {
+    let parkings = await Parking.find({ user : req.body.user }).populate("user reservations")
+
+    res.status(201).send({ parkings, message: "Success" })
+}
+
 exports.getParkingById = async (req, res) => {
-    res.status(201).send({ parking: await Parking.findById(req.body._id), message: "Success" })
+    res.status(201).send({ parking: await Parking.findById(req.body._id).populate("user reservations"), message: "Success" })
 }
 
 exports.getParkingByUserId = async (req, res) => {
-    res.status(201).send({ parking: await Parking.findOne({ idUser : req.body.idUser }), message: "Success" })
+    res.status(201).send({ parking: await Parking.findOne({ idUser : req.body.idUser }).populate("user reservations"), message: "Success" })
 }
 
 exports.addParking = async (req, res) => {
-    const { adresse, nbrPlace, longitude, latitude, prix, idUser } = req.body;
+    const { adresse, nbrPlace, longitude, latitude, prix, user } = req.body;
 
     const newParking = new Parking();
 
@@ -25,7 +32,15 @@ exports.addParking = async (req, res) => {
     newParking.longitude = longitude;
     newParking.latitude = latitude;
     newParking.prix = prix;
-    newParking.idUser = idUser;
+    newParking.user = user;
+
+    await User.findOneAndUpdate(
+        { _id: user },
+        {
+            user: [newParking._id]
+        }
+    );
+
     newParking.save();
 
     res.status(201).send({ parking: "success", parking: newParking });

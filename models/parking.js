@@ -9,6 +9,11 @@ const ParkingSchema = new mongoose.Schema(
         latitude: { type: Number },
         prix: { type: Number },
 
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+
         reservations: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Reservation'

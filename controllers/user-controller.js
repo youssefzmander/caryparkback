@@ -36,6 +36,7 @@ exports.signup = async (req, res) => {
         newUser.address = address;
         newUser.password = mdpEncrypted;
         newUser.phone = phone;
+        //newUser.image = req.file.filename;
         newUser.role = role;
 
         newUser.save();
@@ -56,7 +57,7 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await bcrypt.compare(password, user.password))) {
-       
+
         // token creation
         const token = makeTokenForLogin(user._id, user.role)
 
@@ -73,7 +74,7 @@ exports.login = async (req, res) => {
 
 exports.loginWithSocialApp = async (req, res) => {
 
-    const { email, fullName , role } = req.body;
+    const { email, name, role } = req.body;
 
     if (email == "") {
         res.status(403).send({ message: "error please provide an email" });
@@ -86,7 +87,7 @@ exports.loginWithSocialApp = async (req, res) => {
 
             user = new User();
 
-            user.fullName = fullName;
+            user.fullName = name;
             user.email = email;
             //user.address = ;
             //user.password = ;
@@ -116,7 +117,7 @@ exports.getUserFromToken = async (req, res) => {
 
         try {
             user = await User.findById(jwt.verify(userToken, config.token_secret)["_id"]);
-        } catch(error){
+        } catch (error) {
             console.log("Error : token invalid")
 
             return res.status(403).send({ message: "Token invalid" });
@@ -135,7 +136,7 @@ exports.getUserFromToken = async (req, res) => {
 }
 
 function makeTokenForLogin(_id, role) {
-    return jwt.sign({ _id: _id, role: role}, config.token_secret, {
+    return jwt.sign({ _id: _id, role: role }, config.token_secret, {
         expiresIn: "99999999999", // in Milliseconds (3600000 = 1 hour)
     });
 }
@@ -315,6 +316,20 @@ exports.editProfile = async (req, res) => {
     res.send({ user });
 };
 
+exports.editProfilePic = async (req, res, next) => {
+
+    let user = await User.findOneAndUpdate(
+        { _id: req.body.user },
+        {
+            $set: {
+                photo: req.file.filename
+            }
+        }
+    );
+
+    res.send({ user });
+};
+
 exports.deleteOne = async (req, res) => {
     console.log(req.body)
 
@@ -327,5 +342,20 @@ exports.deleteAll = async (req, res) => {
     User.remove({}, function (err, user) {
         if (err) { return handleError(res, err); }
         return res.status(204).send({ message: "No element" });
+    })
+}
+
+async function configurerDossierUtilisateur(id) {
+    const dir = `./uploads/utilisateurs/utilisateur-${id}`
+
+    fs.mkdir(dir, function () {
+        fs.exists(dir, function (exist, err) {
+            if (exist) {
+                const dir2 = `./uploads/developers/developer-${id}/profile-pic`
+                fs.mkdir(dir2, function () {
+                    console.log("folder created")
+                })
+            }
+        })
     })
 }

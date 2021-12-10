@@ -1,8 +1,9 @@
 const Parking = require("../models/Parking");
-const Reservation = require("../models/Reservation")
+const Reservation = require("../models/Reservation");
+const User = require("../models/User");
 
 exports.getAllReservations = async (req, res) => {
-    const reservations = await Reservation.find().populate({ path: "parking" }).select("-reservations.reservation");
+    const reservations = await Reservation.find().populate({ path: "parking user userFromPark" })
 
     if (reservations) {
         res.status(200).send({ reservations, message: "success" });
@@ -11,6 +12,41 @@ exports.getAllReservations = async (req, res) => {
     }
 };
 
+exports.getMyReservationsAsOwner = async (req, res) => {
+    const reservations = await Reservation.find({ userFromPark : req.body.user}).populate({ path: "parking user userFromPark" })
+
+    if (reservations) {
+        res.status(200).send({ reservations, message: "success" });
+    } else {
+        res.status(403).send({ message: "fail" });
+    }
+    /*Parking.find({ user: req.body.user }).then(function (parkings) {
+
+        parkings.forEach(function (parking) {
+            Reservation.find({ parking: parking._id }).populate({ path: "parking user" }).then(function (reservations) {
+                reservations.forEach(function (reservation) {
+                    reservationsaArray = reservation
+                });
+            })
+            console.log(reservationsaArray)
+        });
+        return Promise.all(reservationsaArray);
+    }).then(function (reservationsaArray) {
+        res.send({ reservationsaArray });
+    }).catch(function (error) {
+        res.status(500).send('one of the queries failed', error);
+    });*/
+};
+
+exports.getMyReservationsAsNormal = async (req, res) => {
+    const reservations = await Reservation.find({ user : req.body.user}).populate({ path: "parking user" })
+
+    if (reservations) {
+        res.status(200).send({ reservations, message: "success" });
+    } else {
+        res.status(403).send({ message: "fail" });
+    }
+};
 
 exports.getReservation = async (req, res) => {
 
@@ -25,17 +61,40 @@ exports.getReservation = async (req, res) => {
 }
 
 exports.addReservation = async (req, res) => {
-    const { dateEntre, dateSortie, parking } = req.body;
+    const { dateEntre, dateSortie, parking, user, userFromPark, disabledPark, specialGuard } = req.body;
     console.log(req.body)
 
     const newReservation = new Reservation();
 
     newReservation.dateEntre = dateEntre;
     newReservation.dateSortie = dateSortie;
+    newReservation.disabledPark = disabledPark;
+    newReservation.specialGuard = specialGuard;
+
     newReservation.parking = parking;
+    newReservation.user = user;
+    newReservation.userFromPark = userFromPark
 
     await Parking.findOneAndUpdate(
         { _id: parking },
+        {
+            $push: {
+                reservations: [newReservation._id]
+            }
+        }
+    );
+
+    await User.findOneAndUpdate(
+        { _id: user },
+        {
+            $push: {
+                reservations: [newReservation._id]
+            }
+        }
+    );
+
+    await User.findOneAndUpdate(
+        { _id: userFromPark },
         {
             $push: {
                 reservations: [newReservation._id]

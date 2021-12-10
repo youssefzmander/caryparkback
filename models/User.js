@@ -9,8 +9,20 @@ const UserSchema = new mongoose.Schema(
                 car: { type: String },
                 address: { type: String },
                 phone: { type: String },
+                photo: { type: String },
                 role: { type: String },
-                isVerified: { type: Boolean }
+                isVerified: { type: Boolean },
+            
+
+                reservations: [{
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'Reservation'
+                }],
+
+                parkings: [{
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'Parking'
+                }]
         },
         {
                 timestamps: { currentTime: () => Date.now() },
