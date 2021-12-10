@@ -39,7 +39,7 @@ exports.getMyReservationsAsOwner = async (req, res) => {
 };
 
 exports.getMyReservationsAsNormal = async (req, res) => {
-    const reservations = await Reservation.find({ user : req.body.user}).populate({ path: "parking user" })
+    const reservations = await Reservation.find({ user : req.body.user}).populate({ path: "parking user userFromPark" })
 
     if (reservations) {
         res.status(200).send({ reservations, message: "success" });
