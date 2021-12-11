@@ -18,7 +18,7 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.signup = async (req, res) => {
-    const { fullName, email, address, password, phone, role } = req.body;
+    const { fullName, email, address, password, phone, role, car } = req.body;
 
     const verifUser = await User.findOne({ email });
     if (verifUser) {
@@ -37,6 +37,7 @@ exports.signup = async (req, res) => {
         newUser.password = mdpEncrypted;
         newUser.phone = phone;
         //newUser.image = req.file.filename;
+        newUser.car = car;
         newUser.role = role;
 
         newUser.save();
@@ -124,8 +125,6 @@ exports.getUserFromToken = async (req, res) => {
         }
 
         if (user) {
-            console.log("User extracted from token")
-
             res.status(200).send({ user: user });
         } else {
             console.log("Can't find user with this token")
@@ -296,7 +295,7 @@ exports.editPassword = async (req, res) => {
 };
 
 exports.editProfile = async (req, res) => {
-    const { email, fullName, address, phone, role, isVerified } = req.body;
+    const { email, fullName, address, phone, car , role, isVerified } = req.body;
 
     let user = await User.findOneAndUpdate(
         { email: email },
@@ -307,7 +306,8 @@ exports.editProfile = async (req, res) => {
                 address: address,
                 //password : password,
                 phone: phone,
-                role: role,
+                role: role,      
+                car: car,
                 isVerified: isVerified
             }
         }

@@ -186,4 +186,6 @@ router.post("/normal-my", ReservationController.getMyReservationsAsNormal)
 */
 router.delete("/deleteAllReservations", ReservationController.deleteAllReservations)
 
+router.post("/by-id", ReservationController.getReservationById)
+
 module.exports = router;

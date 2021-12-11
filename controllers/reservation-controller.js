@@ -13,7 +13,7 @@ exports.getAllReservations = async (req, res) => {
 };
 
 exports.getMyReservationsAsOwner = async (req, res) => {
-    const reservations = await Reservation.find({ userFromPark : req.body.user}).populate({ path: "parking user userFromPark" })
+    const reservations = await Reservation.find({ userFromPark: req.body.user }).populate({ path: "parking user userFromPark" })
 
     if (reservations) {
         res.status(200).send({ reservations, message: "success" });
@@ -39,7 +39,7 @@ exports.getMyReservationsAsOwner = async (req, res) => {
 };
 
 exports.getMyReservationsAsNormal = async (req, res) => {
-    const reservations = await Reservation.find({ user : req.body.user}).populate({ path: "parking user userFromPark" })
+    const reservations = await Reservation.find({ user: req.body.user }).populate({ path: "parking user userFromPark" })
 
     if (reservations) {
         res.status(200).send({ reservations, message: "success" });
@@ -49,15 +49,17 @@ exports.getMyReservationsAsNormal = async (req, res) => {
 };
 
 exports.getReservation = async (req, res) => {
+    res.status(201).send({ reservation: await Reservation.find(), message: "Success" })
+}
 
-    var reservation;
-    if (req.body._id) {
-        reservation = await Reservation.findById(req.body._id)
+exports.getReservationById = async (req, res) => {
+    let reservation = await Reservation.findById(req.body._id)
+    
+    if (reservation.userFromPark == req.body.userFromPark) {
+        res.status(201).send({ reservation: reservation.populate({ path: "parking user userFromPark" }) , message: "Success" })
     } else {
-        reservation = await Reservation.find()
+        res.status(404).send({ message: "Not connected" })
     }
-
-    res.status(201).send({ reservation, message: "Success" })
 }
 
 exports.addReservation = async (req, res) => {

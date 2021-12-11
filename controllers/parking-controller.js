@@ -4,8 +4,7 @@ const User = require("../models/User")
 exports.getParkings = async (req, res) => {
     const parkings = await Parking.find().populate("user reservations")
 
-
-    res.status(201).send({ parkings , message: "Success" })
+    res.status(201).send({ parkings , message: "Success" }) 
 }
 
 exports.getMyParkings = async (req, res) => {
