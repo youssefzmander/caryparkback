@@ -53,12 +53,15 @@ exports.getReservation = async (req, res) => {
 }
 
 exports.getReservationById = async (req, res) => {
-    let reservation = await Reservation.findById(req.body._id)
+    console.log(req.body)
+
+    let reservationVerif = await Reservation.findById(req.body._id)
     
-    if (reservation.userFromPark == req.body.userFromPark) {
-        res.status(201).send({ reservation: reservation.populate({ path: "parking user userFromPark" }) , message: "Success" })
+    if (reservationVerif.userFromPark == req.body.userFromPark) {
+        let reservation = await Reservation.findById(req.body._id).populate({ path: "parking user userFromPark" })
+        res.status(201).send({ reservation , message: "Success" })
     } else {
-        res.status(404).send({ message: "Not connected" })
+        res.status(404).send({ message: "Not valid" })
     }
 }
 
